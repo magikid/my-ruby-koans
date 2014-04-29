@@ -14,6 +14,9 @@
 #   about_triangle_project_2.rb
 #
 def triangle(a, b, c)
+  x, y, z = [a, b, c].sort
+  raise TriangleError, "Sides need to be positive values" if x <= 0
+  raise TriangleError, "Two sides should always add up to more than the third" if x + y <= z
   if a == b and b == c
   	return :equilateral
   elsif a == b or b == c or a == c
@@ -21,7 +24,7 @@ def triangle(a, b, c)
   else
   	return :scalene
   end
-end
+end 
 
 # Error class used in part 2.  No need to change this code.
 class TriangleError < StandardError
