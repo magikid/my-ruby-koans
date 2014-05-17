@@ -41,7 +41,13 @@ def score(dice)
     score += 1000 if dups.count(1) == 3
     score += 100 * dups.count(1) if dups.count(1) < 3
     score += 50 * dups.count(5) if dups.count(5) < 3
-    
+    dups.uniq.each{|die|
+      if die == 1
+        next
+      elsif dups.count(die) == 3
+        score += die * 100
+      end
+    }
   end
   return score
 end
