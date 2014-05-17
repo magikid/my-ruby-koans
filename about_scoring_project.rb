@@ -30,21 +30,19 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 # Your goal is to write the score method.
 
 def score(dice)
-  one,two,three,four,five,six = 0,0,0,0,0,0
-  dice.each{|die|
-      one += 1 if die == 1
-      two += 1 if die == 2
-      three += 1 if die == 3
-      four += 1 if die == 4
-      five += 1 if die == 5
-      six += 1 if die == 6
-  }
   score = 0
-  if one == 3
-    score += 1000
-    one -= 3
+  dups = dice.sort.select{|item| dice.count(item) > 1}
+  if dups == []
+    dice.each{|die| 
+      score += 50 if die == 5
+      score += 100 if die == 1
+    }
+  else
+    score += 1000 if dups.count(1) == 3
+    score += 100 * dups.count(1) if dups.count(1) < 3
+    score += 50 * dups.count(5) if dups.count(5) < 3
+    
   end
-
   return score
 end
 
