@@ -31,24 +31,26 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 
 def score(dice)
   score = 0
-  triplets = dice.sort.select{|item| dice.count(item) % 3 == 0}
-  nontrips = dice.sort.select{|item| dice.count(item) % 3 != 0}
-  if triplets.count > 1
-    score += 1000 if triplets.count(1) == 3
-    score += 100 * triplets.count(1) if triplets.count(1) < 3
-    score += 50 * triplets.count(5) if triplets.count(5) < 3
-    triplets.uniq.each{|die|
+  dupes = dice.select{|item| dice.count(item) >= 2 }
+  nondupes = dice - dupes
+  if dupes.count > 1
+    nondupes << dupes.pop if dupes.uniq.count == 1 and dupes.count == 4
+    score += 1000 if dupes.count(1) == 3
+    score += 100 * dupes.count(1) if dupes.count(1) < 3
+    score += 50 * dupes.count(5) if dupes.count(5) < 3
+    dupes.uniq.each{|die|
       if die == 1
         next
-      elsif triplets.count(die) == 3
+      elsif dupes.count(die) == 3
         score += die * 100
       end
     }
   end
-  nontrips.each{|die| 
+  nondupes.each{|die| 
     score += 50 if die == 5
     score += 100 if die == 1
   }
+
   return score
 end
 
